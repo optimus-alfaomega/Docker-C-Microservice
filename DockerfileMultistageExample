@@ -1,0 +1,14 @@
+# Etapa 1: build (compilación)
+FROM gcc:13.2.0 AS builder
+
+WORKDIR /app
+COPY main.cpp .
+RUN g++ -static -O2 -o app main.cpp
+
+# Etapa 2: runtime (ejecución, solo el binario)
+FROM alpine:latest
+
+WORKDIR /app
+COPY --from=builder /app/app .
+
+CMD ["./app"]
